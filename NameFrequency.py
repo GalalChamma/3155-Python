@@ -3,6 +3,8 @@ import os
 import matplotlib.pyplot as plt
 
 
+
+
 class NameFrequency:
 
     def __init__(self):
@@ -16,10 +18,11 @@ class NameFrequency:
     # dropping null value columns to avoid errors
     # making data frame
     def preparingData(self, file_name, column_name):
-        data = pd.read_csv(file_name)
-        data.dropna(inplace=True)
+        data = pd.read_csv(file_name) #reads file and creates a dataFrame (rows and columns)
+        data.dropna(inplace=True)  # will drop any row with N/A value for a cell and save the data afterwards, so the data is changed forever after this call
         data_frame = dict(data[column_name].str.split(" ", n=1, expand=True))
-        self.data_frame = data_frame
+        # Getting a dataFrame type from a dictionary type
+        self.data_frame = pd.DataFrame.from_dict(data_frame)   # This was self.data_frame = data_frame  therefore it was changing the type of the data frame from DataFrame to Dictionary type
         if isinstance(self.data_frame, pd.DataFrame):
             return True
         return False
@@ -33,11 +36,8 @@ class NameFrequency:
 
         if column_name1 not in self.data_set.columns or column_name2 not in self.data_set.columns:
             return False
-        self.plot_group1 = self.data_set.groupby([column_name1]).size().reset_index(name='counts').sort_values('counts',
-                                                                                                               ascending=False).head(
-            20)
-        self.plot_group2 = self.data_set.groupby([column_name2]).size().reset_index(name='counts').sort_values('counts',                                                                                                               ascending=False).head(
-            20)
+        self.plot_group1 = self.data_set.groupby([column_name1]).size().reset_index(name='counts').sort_values('counts',ascending=False).head(20)
+        self.plot_group2 = self.data_set.groupby([column_name2]).size().reset_index(name='counts').sort_values('counts',ascending=False).head(20)
         return True
 
     # plot
@@ -91,6 +91,5 @@ class NameFrequency:
             else:
                 return userInput
                 break
-
 
 
